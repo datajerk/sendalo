@@ -2,7 +2,50 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+
 		<title>Sendalo</title>
+
+		<style>
+			body {
+				background-color: #707087;
+				font-family: sans-serif;
+				font-size: 1em;
+				color: white;				
+			}
+
+			h1, h2 {
+				text-align: center;
+				padding: 0.2em;
+				margin: 0;
+			}
+
+			h2 {
+				font-weight: normal;
+				font-size: 0.9em;
+			}
+
+			li {
+				margin-bottom: 0.7em;
+			}
+
+			a, a:visited {
+				color: white;
+			}
+
+			#w {
+				text-align: center;
+			}
+
+			#expl {
+				display: none;
+			}
+
+			footer {
+				margin-top: 2em;
+				font-size: 0.8em;
+			}
+		</style>
 
 		<script>
 			function downloadFile() {
@@ -15,20 +58,27 @@
 					fr.readAsArrayBuffer(file);
 				} else {
 					requestURL = document.getElementById('url').value;
+					if (requestURL == '') return;
+					
 					var xhr = new XMLHttpRequest();
-					xhr.open('GET', requestURL);
+					xhr.open('POST', 'sendalo.php', true);
 					xhr.responseType = 'arraybuffer';
+					xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-					xhr.onload = function () {
-					    downloadComplete(this.response);
+					xhr.onreadystatechange = function (ev) {
+						if (this.readyState === 4 && this.status >= 200 && this.status <= 400) {
+							downloadComplete(this.response);
+						}
 					};
-					xhr.send();
+
+					xhr.send("url=" + encodeURI(requestURL));
 				}
 			}
 
 			function downloadComplete(what) {
 				FS.writeFile('/tmp/c2t.dsk', new Uint8Array(what));
-				Module.callMain(['-n8', '/tmp/c2t.dsk', '/tmp/c2t.wav']);
+				var opts = document.getElementById('format').checked ? '-8' : '-n8';
+				Module.callMain([opts, '/tmp/c2t.dsk', '/tmp/c2t.wav']);
 				fd = FS.readFile('/tmp/c2t.wav', {encoding: 'binary'});
 				b = new Blob([fd], { type: 'audio/wav' });
 				u = URL.createObjectURL(b);
@@ -38,13 +88,81 @@
 				audio.load();
 				audio.play();
 			}
-
-			function fileSelected(ev) {
-			}
 		</script>
 	</head>
 
 	<body>
+		<header>
+			<h1>Sendalo!</h1>
+			<h2>Insert image URL or upload file</h2>
+		</header>
+
+		<main>
+			<form>
+				<input type="text" placeholder="https://www.apple.asimov.net/images/masters/Apple%20DOS%203.3%20January%201983.dsk" id="url"/>
+				<input type="file" id="upload" />
+				<input type="button" onclick="downloadFile()"/>
+				<label for="format">Format disk?</label><input id="format" type="checkbox">
+
+				<audio controls="controls" id="audio">
+					<source id="source" src="" type="audio/wav" />
+				</audio>
+
+			</form>
+
+			<p id="w"><a href="#" onclick="document.getElementById('expl').style.display='block'">
+				<small>What's this?</small>
+			</a></p>
+			<div id="expl">
+			<p>
+				Sendalo is a web/mobile interface to an emscripten build of the excellent
+				<a href="https://github.com/datajerk/c2t">c2t</a> tool by
+				<a href="https://github.com/datajerk">datajerk</a>.
+			</p>
+			<p>
+				c2t is a really clever program that allows transferring disk images to
+				a running Apple II (among other things).
+			</p>
+
+			<h3>Why do I think this is useful?</h3>
+			<p><ul>
+				<li>The ASCII Express site is fun and a great idea, but it has
+					limited selection.</li>
+
+				<li>ADTPro is fantastic! But you need a running modern PC, and
+					some means of bidirectional communication to make it work.
+					Ethernet cards are expensive, serial not readily available
+					and audio mic input jacks are becoming difficult to find on
+					modern laptops. And there is no mobile version.</li>
+
+				<li>c2t will work with just a simplex link, so all you need is an
+					audio cable and there you go! But you still need another
+					computer and typing commands in the terminal.</li>
+
+				<li>Finally, with this frontend you can unleash the power of c2t
+					directly on your mobile device, with just an audio cable
+					and no PC. Just paste the .dsk image URL from your favorite
+					web archive, or upload your own, and the disk will be streamed
+					over. Also nice on computers if you don’t want to download
+					executables or type commands.</li>
+			</ul></p>
+
+			<p>
+				c2t can do a lot more than this, don’t forget to check the official
+				project page on GitHub to learn more.
+			</p>
+			</div>
+		</main>
+
+		<footer>
+			<p>
+				Sendalo: &copy; 2020 Federico Santandrea<br/>
+				<a href="mailto:sntfrc@outlook.it">sntfrc@outlook.it</a><br/><br/>
+				c2t: &copy; 2017 Egan Ford &lt;datajerk@gmail.com&gt;<br/>
+				See <a href="https://raw.githubusercontent.com/datajerk/c2t/master/LICENSE">
+				LICENSE</a>.
+		</footer>
+
 		<script>
 			var Module = {
 				print: (function(text) {
@@ -56,14 +174,7 @@
 			};
 		</script>
 
-		<input type="text" value="Misc_Apple_Programs_1.dsk" id="url"/>
-		<input type="file" id="upload" />
-		<input type="button" onclick="downloadFile()"/>
-
-		<audio controls="controls" id="audio">
-			<source id="source" src="" type="audio/wav" />
-		</audio>
-
 		{{{ SCRIPT }}}
 	</body>
 </html>
+

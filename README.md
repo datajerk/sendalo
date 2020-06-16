@@ -1,7 +1,7 @@
 # Sendalo
 ## Web / mobile frontend for c2t
 
-Sendalo is a web/mobile interface to an emscripten build of the excellent c2t-96h tool by datajerk (https://github.com/datajerk/c2t). c2t is a really clever program that allows transferring disk images to a running Apple II (among other things).
+Sendalo is a web/mobile interface to an emscripten build of the excellent c2t tool by datajerk (https://github.com/datajerk/c2t). c2t is a really clever program that allows transferring disk images to a running Apple II (among other things).
 
 Why I think this is useful?
 
