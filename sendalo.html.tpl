@@ -112,10 +112,10 @@
                 
                 var pb = document.getElementById('playbutton');
                 pb.value = 'Please wait...';
-                pb.enabled = false;
-                document.getElementById('url').enabled = false;
-                document.getElementById('upload').enabled = false;
-                document.getElementById('format').enabled = false;
+                pb.disabled = true;
+                document.getElementById('url').disabled = true;
+                document.getElementById('upload').disabled = true;
+                document.getElementById('format').disabled = true;
             }
 
             function downloadComplete(what) {
@@ -148,10 +148,10 @@
 
                 var pb = document.getElementById('playbutton');
                 pb.value = 'Play!';
-                pb.enabled = false;
-                document.getElementById('url').enabled = true;
-                document.getElementById('upload').enabled = true;
-                document.getElementById('format').enabled = true;
+                pb.disabled = false;
+                document.getElementById('url').disabled = false;
+                document.getElementById('upload').disabled = false;
+                document.getElementById('format').disabled = false;
             }
             
             function resetFile() {
@@ -174,7 +174,7 @@
         </header>
 
         <main>
-            <form>
+            <form onsubmit="return false;">
                 <input type="text" onkeypress="resetFile()" placeholder="https://..." id="url"/><br/>
                 <div id="fc"><input type="file" onchange="resetURL()" id="upload" /></div><br/>
                 <input id="format" type="checkbox"><label for="format"><small>Format disk?</small></label><br/><br/>
