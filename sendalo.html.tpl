@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
 
         <title>Sendalo</title>
 
@@ -47,6 +47,7 @@
 
             input#url {
                 width: 300px;
+                font-size: 1.1em;
                 max-width: 90%;
             }
             
@@ -70,6 +71,10 @@
                 text-align: center;
             }
             
+            #audio {
+                display: none;
+            }
+                
             #playbutton {
                 width: 10em;
                 height: 2em;
@@ -104,6 +109,13 @@
 
                     xhr.send("url=" + encodeURI(requestURL));
                 }
+                
+                var pb = document.getElementById('playbutton');
+                pb.value = 'Please wait...';
+                pb.enabled = false;
+                document.getElementById('url').enabled = false;
+                document.getElementById('upload').enabled = false;
+                document.getElementById('format').enabled = false;
             }
 
             function downloadComplete(what) {
@@ -122,12 +134,35 @@
                 audio = document.getElementById('audio');
                 source = document.getElementById('source');
                 source.src = u;
+                
+                document.getElementById('playbutton').style.display = 'none';
+                audio.style.display = 'block';
                 audio.load();
                 audio.play();
+                
+                
             }
             
             function displayError() {
                 alert('Error: only 140K DOS-order images are supported for now. That doesn\'t look like one.');
+
+                var pb = document.getElementById('playbutton');
+                pb.value = 'Play!';
+                pb.enabled = false;
+                document.getElementById('url').enabled = true;
+                document.getElementById('upload').enabled = true;
+                document.getElementById('format').enabled = true;
+            }
+            
+            function resetFile() {
+                document.getElementById('fc').innerHTML = '<input type="file" onchange="resetURL()" id="upload" />';
+                document.getElementById('url').placeholder = 'https://...';
+            }
+            
+            function resetURL() {
+                var txt = document.getElementById('url');
+                txt.value='';
+                txt.placeholder = '-- uploaded file --';
             }
         </script>
     </head>
@@ -140,11 +175,10 @@
 
         <main>
             <form>
-                <input type="text" placeholder="https://www.apple.asimov.net/images/masters/Apple%20DOS%203.3%20January%201983.dsk" id="url"/><br/>
-                <input type="file" id="upload" /><br/>
+                <input type="text" onkeypress="resetFile()" placeholder="https://..." id="url"/><br/>
+                <div id="fc"><input type="file" onchange="resetURL()" id="upload" /></div><br/>
                 <input id="format" type="checkbox"><label for="format"><small>Format disk?</small></label><br/><br/>
                 <input type="button" id="playbutton" value="Play!" onclick="downloadFile()"/><br/>
-                
             </form>
             
             <div id="audiopad">
