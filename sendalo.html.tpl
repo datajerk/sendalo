@@ -238,6 +238,7 @@
                 c2t: &copy; 2017 Egan Ford &lt;datajerk@gmail.com&gt;<br/>
                 See <a href="https://raw.githubusercontent.com/datajerk/c2t/master/LICENSE">
                 LICENSE</a>.
+            </p>
         </footer>
 
         <script>
