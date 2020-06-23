@@ -83,6 +83,12 @@
                 height: 2em;
                 font-size: inherit;
             }
+
+            #reload {
+                display: none;
+                text-align: center;
+                margin-top: 1em;
+            }
             
         </style>
 
@@ -143,7 +149,7 @@
                 audio.load();
                 audio.play();
                 
-                
+                document.getElementById('reload').style.display = 'block'; 
             }
             
             function displayError() {
@@ -188,6 +194,10 @@
                 <audio controls="controls" id="audio">
                     <source id="source" src="" type="audio/wav" />
                 </audio>
+            </div>
+
+            <div id="reload">
+                <a href="javascript:window.location.reload();">New transfer</a>
             </div>
 
             <p id="w"><a href="#" onclick="document.getElementById('expl').style.display='block'">
