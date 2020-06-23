@@ -3,6 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+        <link rel="icon" type="image/png" href="apple-touch-icon.png" /> 
 
         <title>Sendalo</title>
 
