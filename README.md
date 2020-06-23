@@ -3,6 +3,9 @@
 
 Sendalo is a web/mobile interface to an emscripten build of the excellent c2t tool by datajerk (https://github.com/datajerk/c2t). c2t is a really clever program that allows transferring disk images to a running Apple II (among other things).
 
+### Try it now here: https://cutt.ly/sendalo
+(but it actually can work completely offline, with file input).
+
 Why I think this is useful?
 
 * The ASCII Express site is fun and a great idea, but it has limited selection.
